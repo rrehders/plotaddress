@@ -1,0 +1,278 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      9811,        269]
+NotebookOptionsPosition[      9332,        249]
+NotebookOutlinePosition[      9719,        266]
+CellTagsIndexPosition[      9676,        263]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", "Initialization", " ", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{"Needs", " ", "[", "\"\<JLink`\>\"", "]"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Load", " ", "Java", " ", "functionality"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"JavaLink", "[", "]"}], " ", "===", " ", "Null"}], ",", " ", 
+      RowBox[{
+       RowBox[{"InstallJava", "[", "]"}], ";"}]}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"LoadJavaClass", "[", "\"\<java.net.URLEncoder\>\"", "]"}], ";"}],
+    "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Private", " ", "API", " ", "key", " ", "from", " ", "google"}], 
+    " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{
+    "$key", " ", "=", " ", 
+     "\"\<AIzaSyBufb92UiWaK5WRqZF_PeUloidrgn4OUw8\>\""}], ";"}], "\n", "\n", 
+   RowBox[{
+    RowBox[{"ToWebString", "[", "s_String", "]"}], " ", ":=", " ", 
+    RowBox[{"URLEncoder`encode", "[", 
+     RowBox[{"s", ",", " ", "\"\<UTF-8\>\""}], "]"}]}], "\n", "\n", 
+   RowBox[{
+    RowBox[{"iapi", "[", 
+     RowBox[{"address_String", ",", " ", "key_String"}], "]"}], " ", ":=", 
+    " ", "\n", " ", 
+    RowBox[{
+    "\"\<https://maps.googleapis.com/maps/api/geocode/json?address=\>\"", " ",
+      "<>", " ", "\n", "  ", 
+     RowBox[{"ToWebString", "[", "address", "]"}], " ", "<>", " ", 
+     "\"\<&key=\>\"", " ", "<>", " ", "key"}]}], "\n", "  ", "\n", 
+   RowBox[{
+    RowBox[{"api", "[", "address_String", "]"}], " ", ":=", "\n", "\t", 
+    RowBox[{"With", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"res", " ", "=", " ", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"\"\<lat\>\"", ",", " ", "\"\<lng\>\""}], "}"}], " ", "/.", 
+         " ", 
+         RowBox[{"(", 
+          RowBox[{"\"\<location\>\"", " ", "/.", " ", 
+           RowBox[{"(", 
+            RowBox[{"\"\<geometry\>\"", " ", "/.", " ", 
+             RowBox[{"(", 
+              RowBox[{"\"\<results\>\"", " ", "/.", " ", "\n", "\t\t", 
+               RowBox[{"ImportString", "[", 
+                RowBox[{
+                 RowBox[{"Import", "[", 
+                  RowBox[{
+                   RowBox[{"iapi", "[", 
+                    RowBox[{"address", ",", " ", "$key"}], "]"}], ",", " ", 
+                   "\"\<String\>\""}], "]"}], ",", " ", "\"\<JSon\>\""}], 
+                "]"}]}], ")"}]}], ")"}]}], ")"}]}]}], "}"}], ",", "\n", 
+      "\t\t", 
+      RowBox[{"Switch", "[", 
+       RowBox[{"res", ",", 
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{"_Real", ",", " ", "_Real"}], "}"}], "}"}], ",", " ", 
+        RowBox[{"First", "@", "res"}], ",", " ", "_", ",", " ", 
+        RowBox[{"Missing", "[", "\"\<NotAvailable\>\"", "]"}]}], "]"}]}], 
+     "\n", "\t", "]"}]}]}]}]], "Code",
+ CellChangeTimes->{3.660827768651039*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Handle", " ", "Command", " ", "line", " ", "arguments"}], " ", 
+   "*)"}], "\n", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"If", " ", "no", " ", "arguments", " ", "are", " ", "passed"}], 
+    ",", " ", 
+    RowBox[{
+    "use", " ", "a", " ", "default", " ", "filename", " ", "of", " ", 
+     "\"\<address.csv\>\""}]}], " ", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Length", "[", "$ScriptCommandLine", "]"}], ">", "1"}], ",", 
+     "\n", "\t", 
+     RowBox[{
+      RowBox[{"args", " ", "=", " ", 
+       RowBox[{"Rest", "[", "$ScriptCommandLine", "]"}]}], ";", "\n", "\t", 
+      RowBox[{"ifile", " ", "=", " ", 
+       RowBox[{"First", "[", "$ScriptCommandLine", "]"}]}]}], ",", "\n", "\t", 
+     RowBox[{"ifile", " ", "=", " ", "\"\<address.csv\>\""}]}], "\n", "]"}], 
+   "\n", 
+   RowBox[{"ofile", " ", "=", " ", 
+    RowBox[{
+     RowBox[{"FileBaseName", "[", "ifile", "]"}], "<>", 
+     "\"\<.jpg\>\""}]}]}]}]], "Code",
+ CellChangeTimes->{{3.660827768651039*^9, 3.660827792618745*^9}, 
+   3.6608278543949413`*^9, {3.6608279687964163`*^9, 3.6608279824986153`*^9}, {
+   3.660828680456506*^9, 3.6608286832299557`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Read", " ", "file", " ", "of", " ", "addresses"}], " ", "*)"}], 
+  "\n", 
+  RowBox[{"Switch", "[", 
+   RowBox[{
+    RowBox[{"FileExtension", "[", "ifile", "]"}], ",", "\n", "\t", 
+    "\"\<csv\>\"", ",", 
+    RowBox[{"tblInput", "=", 
+     RowBox[{"Import", "[", "ifile", "]"}]}], ",", "\n", "\t", "\"\<xls\>\"", 
+    ",", 
+    RowBox[{"tblInput", "=", 
+     RowBox[{"Import", "[", 
+      RowBox[{"ifile", ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<data\>\"", ",", "1"}], "}"}]}], "]"}]}], ",", "\n", 
+    "\t", "\"\<xlsx\>\"", ",", 
+    RowBox[{"tblInput", "=", 
+     RowBox[{"Import", "[", 
+      RowBox[{"ifile", ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<data\>\"", ",", "1"}], "}"}]}], "]"}]}]}], "\n", 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.660827768651039*^9, 3.660827792618745*^9}, {
+  3.6608278543949413`*^9, 3.660827858602727*^9}, {3.660828734506308*^9, 
+  3.66082874361672*^9}, {3.66082881320188*^9, 3.660828845320127*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Geolocate", " ", "Addresses", " ", "from", " ", "Google", " ", "Maps"}], 
+   " ", "*)"}], "\n", 
+  RowBox[{"Module", "[", "\n", " \t", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "colAddresses", ",", " ", "colLocations", ",", " ", "colLat", ",", " ", 
+      "ColLong", ",", " ", "tmp"}], "}"}], ",", "\t", "\n", " \t", 
+    RowBox[{"(*", " ", 
+     RowBox[{
+     "Merge", " ", "address", " ", "components", " ", "into", " ", "a", " ", 
+      "single", " ", "string"}], " ", "*)"}], "\n", " \t", "\n", " ", 
+    RowBox[{
+     RowBox[{"colAddresses", " ", "=", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"StringJoin", "[", 
+         RowBox[{"Riffle", "[", 
+          RowBox[{"#", ",", " ", "\"\< \>\""}], "]"}], "]"}], " ", "&"}], " ",
+        "/@", " ", "tblInput"}]}], ";", "\n", " \t", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "Geolocate", " ", "the", " ", "address", " ", "on", " ", "Google"}], 
+      " ", "*)"}], "\n", " \t", "\n", " ", 
+     RowBox[{"colLocations", " ", "=", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"api", "[", "#", "]"}], " ", "&"}], " ", "/@", " ", 
+       "colAddresses"}]}], ";", "\n", " \t", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "flip", " ", "the", " ", "table", " ", "and", " ", "add", " ", "the", 
+       " ", "latitude", " ", "and", " ", "longitude", " ", "as", " ", 
+       "rows"}], " ", "*)"}], "\n", " \t", "\n", " ", 
+     RowBox[{"tmp", " ", "=", " ", 
+      RowBox[{"Transpose", "[", "tblInput", "]"}]}], ";", "\n", " \t", 
+     RowBox[{"tmp", " ", "=", " ", 
+      RowBox[{"Append", "[", 
+       RowBox[{"tmp", ",", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"First", "@", "#"}], " ", "&"}], " ", "/@", " ", 
+         "colLocations"}]}], "]"}]}], ";", " ", "\n", " ", 
+     RowBox[{"tmp", " ", "=", " ", 
+      RowBox[{"Append", "[", 
+       RowBox[{"tmp", ",", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Last", "@", "#"}], " ", "&"}], " ", "/@", " ", 
+         "colLocations"}]}], "]"}]}], ";", "\n", " \t", 
+     RowBox[{"tblInput", " ", "=", " ", 
+      RowBox[{"Transpose", "[", "tmp", "]"}]}], ";"}]}], "\n", " ", 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.660827768651039*^9, 3.660827792618745*^9}, {
+  3.6608278543949413`*^9, 3.660827886417905*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Convert", " ", "the", " ", "information", " ", "to", " ", "a", " ", 
+    "list", " ", "of", " ", "GeoPosition", " ", "Objects"}], " ", "*)"}], 
+  "\n", 
+  RowBox[{
+   RowBox[{"geopos", " ", "=", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"GeoPosition", "[", "#", "]"}], "&"}], "/@", 
+     RowBox[{"tblInput", "\[LeftDoubleBracket]", 
+      RowBox[{"All", ",", 
+       RowBox[{"{", 
+        RowBox[{"6", ",", "7"}], "}"}]}], "\[RightDoubleBracket]"}]}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Plot", " ", "the", " ", "locations"}], " ", "*)"}], "\n", 
+   RowBox[{"imgGeoPlot", " ", "=", " ", 
+    RowBox[{"GeoListPlot", "[", 
+     RowBox[{"geopos", ",", 
+      RowBox[{"ImageSize", "\[Rule]", "Large"}]}], "]"}]}]}]}]], "Code",
+ CellChangeTimes->{{3.660829435080468*^9, 3.660829553626563*^9}, {
+  3.660829593625475*^9, 3.6608296210633917`*^9}, {3.660831131085106*^9, 
+  3.6608311319967203`*^9}, {3.6608311719591703`*^9, 3.6608311726886177`*^9}, {
+  3.6608975363010798`*^9, 3.660897562568845*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Save", " ", "Graphic"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"Export", "[", 
+   RowBox[{"ofile", ",", "imgGeoPlot"}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.6608309411916227`*^9, 3.660830958863791*^9}}]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{808, 587},
+WindowMargins->{{20, Automatic}, {Automatic, 44}},
+FrontEndVersion->"10.2 for Mac OS X x86 (32-bit, 64-bit Kernel) (July 29, \
+2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 2821, 70, 354, "Code"],
+Cell[3382, 92, 1232, 31, 161, "Code"],
+Cell[4617, 125, 1007, 26, 130, "Code"],
+Cell[5627, 153, 2335, 58, 290, "Code"],
+Cell[7965, 213, 1088, 26, 98, "Code"],
+Cell[9056, 241, 272, 6, 66, "Code"]
+}
+]
+*)
+
+(* End of internal cache information *)
