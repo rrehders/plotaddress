@@ -42,13 +42,20 @@ api[address_String] :=
 
 
 (* Handle Command line arguments *)
-(* If no arguments are passed, use a default filename of "address.csv" *)
-If[Length[$ScriptCommandLine]>1,
-	args = Rest[$ScriptCommandLine];
-	ifile = First[$ScriptCommandLine],
-	ifile = "address.csv"
+(* If ScriptCommandline is completely blank, the script is being debugged in Mathematica *)
+If[Length[$ScriptCommandLine]==0,
+	ifile = FileNameJoin[{NotebookDirectory[],"test","address.csv"}];
+	ofile = FileNameJoin[{NotebookDirectory[],"test","address.jpg"}];,
+	(* ELSE, Script is live, check if no arguments are passed *)
+	If[Length[$ScriptCommandLine]>1,
+		args = Rest[$ScriptCommandLine];
+		ifile = First[$ScriptCommandLine];
+		ofile = FileBaseName[ifile]<>".jpg";,
+		(* ELSE Scipt is live but no argument passed, use a default filename of "address.csv" *)
+		ifile = "address.csv";
+		ofile = FileBaseName[ifile]<>".jpg";
+	]
 ]
-ofile = FileBaseName[ifile]<>".jpg"
 
 
 (* Read file of addresses *)
@@ -80,7 +87,7 @@ Module[
 (* Convert the information to a list of GeoPosition Objects *)
 geopos = GeoPosition[#]&/@tblInput[[All,{6,7}]]
 (* Plot the locations *)
-imgGeoPlot = GeoListPlot[geopos,ImageSize->Large]
+imgGeoPlot = GeoListPlot[geopos,ImageSize->1000,PlotStyle->{Blue}]
 
 
 (* Save Graphic *)
