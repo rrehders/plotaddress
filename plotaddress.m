@@ -41,54 +41,75 @@ api[address_String] :=
 	]
 
 
-(* Handle Command line arguments *)
+(* Define argument processor *)
+cmdlnparser[arg_] := Module[{tmp},
+	If[StringContainsQ[arg,"colour="],
+		clist=ToExpression[Rest[StringCases[arg, RegularExpression["\\w+"]]]];
+		Return
+	];
+	If[StringContainsQ[arg,"legend="],
+		legend=Rest[StringCases[arg, RegularExpression["\\w+"]]];
+		Return;
+	];
+	AppendTo[flist,arg];
+]
 (* If ScriptCommandline is completely blank, the script is being debugged in Mathematica *)
 If[Length[$ScriptCommandLine]==0,
-	ifile = FileNameJoin[{NotebookDirectory[],"test","address.csv"}];
-	ofile = FileNameJoin[{NotebookDirectory[],"test","address.jpg"}];,
-	(* ELSE, Script is live, check if no arguments are passed *)
-	If[Length[$ScriptCommandLine]>1,
-		args = Rest[$ScriptCommandLine];
-		ifile = First[$ScriptCommandLine];
-		ofile = FileBaseName[ifile]<>".jpg";,
-		(* ELSE Scipt is live but no argument passed, use a default filename of "address.csv" *)
-		ifile = "address.csv";
-		ofile = FileBaseName[ifile]<>".jpg";
+	(* Set up a debug Command Line *)
+	args={NotebookDirectory[]<>"test/address1.csv",NotebookDirectory[]<>"test/address2.csv","colour={Blue,Green}","legend={Personal,Work}"};
+]
+
+(* Parse command line *)
+flist = {};
+clist = {};
+legend = {};
+cmdlnparser /@ args;
+
+
+(* Define function to read input addresses *)
+readaddr[ifile_] :=
+	Switch[FileExtension[ifile],
+		"csv",Import[ifile],
+		"xls",Import[ifile,{"data",1}],
+		"xlsx",Import[ifile,{"data",1}]
 	]
+
+(* Read files from the command line *)
+tblInput = readaddr /@ flist[[;;-3]];
+
+
+(* Define Function to geolocate adress list *)
+geoloc[input_] := Module[{colAddresses, colLocations, tmp},
+	(* Merge address components into a single string *)
+	colAddresses = StringJoin[Riffle[#, " "]] & /@ input;
+	(* Geolocate the address on Google *)
+	colLocations = api[#] & /@ colAddresses;
+	(* flip the table and add the latitude and longitude as rows *)
+	tmp = Transpose[input];
+	tmp = Append[tmp, First@# & /@ colLocations]; 
+	tmp = Append[tmp, Last@# & /@ colLocations];
+	Transpose[tmp]
 ]
-
-
-(* Read file of addresses *)
-Switch[FileExtension[ifile],
-	"csv",tblInput=Import[ifile],
-	"xls",tblInput=Import[ifile,{"data",1}],
-	"xlsx",tblInput=Import[ifile,{"data",1}]
-]
-
 
 (* Geolocate Addresses from Google Maps *)
-Module[
- 	{colAddresses, colLocations, colLat, ColLong, tmp},	
- 	(* Merge address components into a single string *)
- 	
- colAddresses = StringJoin[Riffle[#, " "]] & /@ tblInput;
- 	(* Geolocate the address on Google *)
- 	
- colLocations = api[#] & /@ colAddresses;
- 	(* flip the table and add the latitude and longitude as rows *)
- 	
- tmp = Transpose[tblInput];
- 	tmp = Append[tmp, First@# & /@ colLocations]; 
- tmp = Append[tmp, Last@# & /@ colLocations];
- 	tblInput = Transpose[tmp];
- ]
+tblLoc = geoloc /@ tblInput;
 
 
-(* Convert the information to a list of GeoPosition Objects *)
-geopos = GeoPosition[#]&/@tblInput[[All,{6,7}]]
+(* Create a function to convert address listing to a list of geopositions *)
+cvttogeopos[addrlst_]:= Module[{tmp},
+	(* Filter out all addresses not located *)
+	tmp = Map[addrlst, Select[addrlst, realQ[#[[All,6]]]], 2];
+	(* Convert the information to a list of GeoPosition Objects *)
+	GeoPosition[#]&/@ tmp[[All,{6,7}]]
+]
+
+(* build a list of position lists *)
+geoPos = cvttogeopos /@ tblLoc;
+
+
 (* Plot the locations *)
-imgGeoPlot = GeoListPlot[geopos,ImageSize->1000,PlotStyle->{Blue}]
+imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920,PlotStyle->clist,PlotLegends->legend]
 
 
 (* Save Graphic *)
-Export[ofile,imgGeoPlot]
+Export["addrplot.jpg",imgGeoPlot]
