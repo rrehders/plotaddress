@@ -84,31 +84,26 @@ geoloc[input_] := Module[{colAddresses, colLocations, tmp},
 	colAddresses = StringJoin[Riffle[#, " "]] & /@ input;
 	(* Geolocate the address on Google *)
 	colLocations = api[#] & /@ colAddresses;
-	(* flip the table and add the latitude and longitude as rows *)
+	(* flip the table to add the latitude and longitude as rows *)
 	tmp = Transpose[input];
 	tmp = Append[tmp, First@# & /@ colLocations]; 
 	tmp = Append[tmp, Last@# & /@ colLocations];
-	Transpose[tmp]
+	(* Flip the table back to restore columnar format *)
+	tmp = Transpose[tmp];
+	(* Filter out any addresses not located *)
+	Select[tmp,NumberQ[#[[6]]]&]
 ]
 
 (* Geolocate Addresses from Google Maps *)
 tblLoc = geoloc /@ tblInput;
 
 
-(* Create a function to convert address listing to a list of geopositions *)
-cvttogeopos[addrlst_]:= Module[{tmp},
-	(* Filter out all addresses not located *)
-	tmp = Map[addrlst, Select[addrlst, realQ[#[[All,6]]]], 2];
-	(* Convert the information to a list of GeoPosition Objects *)
-	GeoPosition[#]&/@ tmp[[All,{6,7}]]
-]
-
-(* build a list of position lists *)
-geoPos = cvttogeopos /@ tblLoc;
+(* Convert the full nested list into a list of Goegraphic Coordinates only *) 
+geoPos = Map[GeoPosition[#[[{6,7}]]]&, tblLoc, {2}];
 
 
 (* Plot the locations *)
-imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920,PlotStyle->clist,PlotLegends->legend]
+imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920,PlotStyle->clist,PlotLegends->legend];
 
 
 (* Save Graphic *)
