@@ -45,25 +45,26 @@ api[address_String] :=
 cmdlnparser[arg_] := Module[{tmp},
 	If[StringContainsQ[arg,"colour="],
 		clist=ToExpression[Rest[StringCases[arg, RegularExpression["\\w+"]]]];
-		Return
+		Return[];
 	];
 	If[StringContainsQ[arg,"legend="],
 		legend=Rest[StringCases[arg, RegularExpression["\\w+"]]];
-		Return;
+		Return[];
 	];
 	AppendTo[flist,arg];
 ]
-(* If ScriptCommandline is completely blank, the script is being debugged in Mathematica *)
+(* If $ScriptCommandLine is completely blank, the script/notebook is being debugged in Mathematica *)
 If[Length[$ScriptCommandLine]==0,
 	(* Set up a debug Command Line *)
-	args={NotebookDirectory[]<>"test/address1.csv",NotebookDirectory[]<>"test/address2.csv","colour={Blue,Green}","legend={Personal,Work}"};
+	args={"plotaddess", NotebookDirectory[]<>"test/address1.csv",NotebookDirectory[]<>"test/address2.csv","colour={Blue,Green}","legend={Personal,Work}"};,
+	args=$ScriptCommandLine;
 ]
 
 (* Parse command line *)
 flist = {};
 clist = {};
 legend = {};
-cmdlnparser /@ args;
+cmdlnparser /@ Rest[args];
 
 
 (* Define function to read input addresses *)
