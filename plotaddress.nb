@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     19253,        460]
-NotebookOptionsPosition[     18499,        433]
-NotebookOutlinePosition[     18888,        450]
-CellTagsIndexPosition[     18845,        447]
+NotebookDataLength[     23880,        567]
+NotebookOptionsPosition[     23121,        540]
+NotebookOutlinePosition[     23510,        557]
+CellTagsIndexPosition[     23467,        554]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -148,35 +148,76 @@ Cell[BoxData[
       RowBox[{
       "Set", " ", "up", " ", "a", " ", "debug", " ", "Command", " ", "Line"}],
        " ", "*)"}], "\n", "\t", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"args", "=", 
+         RowBox[{"{", 
+          RowBox[{"\"\<plotaddress\>\"", ",", " ", 
+           RowBox[{
+            RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+            "\"\<test/address1.csv\>\""}], ",", 
+           RowBox[{
+            RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+            "\"\<test/address2.csv\>\""}], ",", "\"\<colour={Blue,Green}\>\"",
+            ",", "\"\<legend={Personal,Work}\>\""}], "}"}]}], ";"}], ","}], 
+      " ", "*)"}], "\n", "\t", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "Set", " ", "up", " ", "a", " ", "debug", " ", "Command", " ", "Line"}],
+       " ", "*)"}], "\n", "\t", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"args", "=", 
+         RowBox[{"{", 
+          RowBox[{"\"\<plotaddress\>\"", ",", " ", 
+           RowBox[{
+            RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+            "\"\<test/address1.csv\>\""}], ",", 
+           "\"\<legend={Personal,Work}\>\""}], "}"}]}], ";"}], ","}], " ", 
+      "*)"}], "\n", "\t", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "Set", " ", "up", " ", "a", " ", "debug", " ", "Command", " ", "Line"}],
+       " ", "*)"}], "\n", "\t", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"args", "=", 
+         RowBox[{"{", 
+          RowBox[{"\"\<plotaddress\>\"", ",", " ", 
+           RowBox[{
+            RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+            "\"\<test/address1.csv\>\""}], ",", 
+           "\"\<colour={Blue,Green}\>\""}], "}"}]}], ";"}], ","}], " ", 
+      "*)"}], "\n", 
      RowBox[{
-      RowBox[{"args", "=", 
-       RowBox[{"{", 
-        RowBox[{"\"\<plotaddess\>\"", ",", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"If", "[", 
          RowBox[{
-          RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
-          "\"\<test/address1.csv\>\""}], ",", 
-         RowBox[{
-          RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
-          "\"\<test/address2.csv\>\""}], ",", "\"\<colour={Blue,Green}\>\"", 
-         ",", "\"\<legend={Personal,Work}\>\""}], "}"}]}], ";"}], ",", "\n", 
-     "\t", 
-     RowBox[{
-      RowBox[{"args", "=", "$ScriptCommandLine"}], ";"}]}], "\n", "]"}], "\n",
-    "\n", 
-   RowBox[{"(*", " ", 
-    RowBox[{"Parse", " ", "command", " ", "line"}], " ", "*)"}], "\n", 
-   RowBox[{
-    RowBox[{"flist", " ", "=", " ", 
-     RowBox[{"{", "}"}]}], ";"}], "\n", 
-   RowBox[{
-    RowBox[{"clist", " ", "=", " ", 
-     RowBox[{"{", "}"}]}], ";"}], "\n", 
-   RowBox[{
-    RowBox[{"legend", " ", "=", " ", 
-     RowBox[{"{", "}"}]}], ";"}], "\n", 
-   RowBox[{
-    RowBox[{"cmdlnparser", " ", "/@", " ", 
-     RowBox[{"Rest", "[", "args", "]"}]}], ";"}]}]}]], "Code",
+          RowBox[{
+           RowBox[{"Length", "[", "$ScriptCommandLine", "]"}], "\[Equal]", 
+           "1"}], ",", "\n", "\t", 
+          RowBox[{
+          "Print", "[", 
+           "\"\<USGE: plotaddress file1 [file2...] \
+[colour={colour1,colour2...}] [legend={title1,title2...}\>\"", "]"}], ",", 
+          "\n", "\t", 
+          RowBox[{
+           RowBox[{"args", "=", "$ScriptCommandLine"}], ";"}]}], "\n", "]"}], 
+        "\n", "\n", 
+        RowBox[{"(*", " ", 
+         RowBox[{"Parse", " ", "command", " ", "line"}], " ", "*)"}], "\n", 
+        "flist"}], " ", "=", " ", 
+       RowBox[{"{", "}"}]}], ";", "\n", 
+      RowBox[{"clist", " ", "=", " ", 
+       RowBox[{"{", "}"}]}], ";", "\n", 
+      RowBox[{"legend", " ", "=", " ", 
+       RowBox[{"{", "}"}]}], ";", "\n", 
+      RowBox[{"cmdlnparser", " ", "/@", " ", 
+       RowBox[{"Rest", "[", "args", "]"}]}], ";"}]}]}]}]}]], "Code",
  CellChangeTimes->{{3.660827768651039*^9, 3.660827792618745*^9}, 
    3.6608278543949413`*^9, {3.6608279687964163`*^9, 3.6608279824986153`*^9}, {
    3.660828680456506*^9, 3.6608286832299557`*^9}, {3.661080259588388*^9, 
@@ -216,7 +257,11 @@ Cell[BoxData[
    3.661426802326746*^9, 3.661426854668378*^9}, {3.662139419003829*^9, 
    3.662139501555626*^9}, {3.662139864540224*^9, 3.662139883856215*^9}, {
    3.662139925290491*^9, 3.662139929228037*^9}, {3.662144029957322*^9, 
-   3.662144034952236*^9}}],
+   3.662144034952236*^9}, {3.6622300496262007`*^9, 3.662230087825968*^9}, {
+   3.662243845616407*^9, 3.6622439265176153`*^9}, {3.662244065415044*^9, 
+   3.662244078479553*^9}, {3.662244753233041*^9, 3.662244758854917*^9}, {
+   3.662244871180513*^9, 3.662244872644746*^9}, {3.662244905084116*^9, 
+   3.662245131246252*^9}}],
 
 Cell[BoxData["flist"], "Input",
  CellChangeTimes->{{3.6612735056882963`*^9, 3.661273507150652*^9}}],
@@ -258,17 +303,13 @@ Cell[BoxData[
      "line"}], " ", "*)"}], "\n", 
    RowBox[{
     RowBox[{"tblInput", " ", "=", " ", 
-     RowBox[{"readaddr", " ", "/@", " ", 
-      RowBox[{"flist", "\[LeftDoubleBracket]", 
-       RowBox[{";;", 
-        RowBox[{"-", "3"}]}], "\[RightDoubleBracket]"}]}]}], 
-    ";"}]}]}]], "Code",
+     RowBox[{"readaddr", " ", "/@", " ", "flist"}]}], ";"}]}]}]], "Code",
  CellChangeTimes->{{3.661180941084029*^9, 3.661180989012905*^9}, {
    3.661261155776153*^9, 3.661261254656642*^9}, {3.661273718907856*^9, 
    3.6612737699482803`*^9}, {3.6612742613284187`*^9, 3.661274338578671*^9}, {
    3.66127591037998*^9, 3.6612759454835167`*^9}, {3.6612759858296013`*^9, 
    3.661276043437615*^9}, 3.661276285600128*^9, {3.66142783452355*^9, 
-   3.661427839003559*^9}}],
+   3.661427839003559*^9}, {3.6622306362691793`*^9, 3.66223063781308*^9}}],
 
 Cell[BoxData["tblInput"], "Input",
  CellChangeTimes->{{3.6612743584338007`*^9, 3.661274362241043*^9}}],
@@ -400,14 +441,72 @@ Cell[BoxData[
  RowBox[{
   RowBox[{"(*", " ", 
    RowBox[{"Plot", " ", "the", " ", "locations"}], " ", "*)"}], "\n", 
-  RowBox[{
-   RowBox[{"imgGeoPlot", " ", "=", " ", 
-    RowBox[{"GeoListPlot", "[", 
-     RowBox[{"geoPos", ",", 
-      RowBox[{"ImageSize", "\[Rule]", "1920"}], ",", 
-      RowBox[{"PlotStyle", "\[Rule]", "clist"}], ",", 
-      RowBox[{"PlotLegends", "\[Rule]", "legend"}]}], "]"}]}], 
-   ";"}]}]], "Code",
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Use", " ", "Bit", " ", "operations", " ", "to", " ", "build", " ", "4", 
+    " ", "cases", " ", "based", " ", "on", " ", "presence", " ", "of", " ", 
+    "colour", " ", "and", " ", "legend", " ", "parameters"}], " ", "*)"}], 
+  "\n", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "0", " ", "no", " ", "colour", " ", "or", " ", "legend", " ", 
+    "specified"}], " ", "*)"}], "\n", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"1", " ", "Legends", " ", "specified"}], ",", " ", 
+    RowBox[{"but", " ", "not", " ", "colours"}]}], " ", "*)"}], "\n", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"2", " ", "Colours", " ", "specified"}], ",", " ", 
+    RowBox[{"but", " ", "not", " ", "Legend"}]}], " ", "*)"}], "\n", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "3", " ", "Both", " ", "Colours", " ", "and", " ", "Legend", " ", 
+    "Specified"}], " ", "*)"}], "\n", 
+  RowBox[{"Switch", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "clist", "]"}], ">", "0"}], ",", 
+       RowBox[{"BitSet", "[", 
+        RowBox[{"0", ",", "1"}], "]"}], ",", "0"}], "]"}], "+", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "legend", "]"}], ">", "0"}], ",", 
+       RowBox[{"BitSet", "[", 
+        RowBox[{"0", ",", "0"}], "]"}], ",", "0"}], "]"}]}], ",", "\n", "\t", 
+    "0", ",", 
+    RowBox[{
+     RowBox[{"imgGeoPlot", " ", "=", " ", 
+      RowBox[{"GeoListPlot", "[", 
+       RowBox[{"geoPos", ",", 
+        RowBox[{"ImageSize", "\[Rule]", "1920"}]}], "]"}]}], ";"}], ",", "\n",
+     "\t", "1", ",", 
+    RowBox[{
+     RowBox[{"imgGeoPlot", " ", "=", " ", 
+      RowBox[{"GeoListPlot", "[", 
+       RowBox[{"geoPos", ",", 
+        RowBox[{"ImageSize", "\[Rule]", "1920"}], ",", 
+        RowBox[{"PlotLegends", "\[Rule]", "legend"}]}], "]"}]}], ";"}], ",", 
+    "\n", "\t", "2", ",", 
+    RowBox[{
+     RowBox[{"imgGeoPlot", " ", "=", " ", 
+      RowBox[{"GeoListPlot", "[", 
+       RowBox[{"geoPos", ",", 
+        RowBox[{"ImageSize", "\[Rule]", "1920"}], ",", 
+        RowBox[{"PlotStyle", "\[Rule]", "clist"}]}], "]"}]}], ";"}], ",", 
+    "\n", "\t", "3", ",", 
+    RowBox[{
+     RowBox[{"imgGeoPlot", " ", "=", " ", 
+      RowBox[{"GeoListPlot", "[", 
+       RowBox[{"geoPos", ",", 
+        RowBox[{"ImageSize", "\[Rule]", "1920"}], ",", 
+        RowBox[{"PlotStyle", "\[Rule]", "clist"}], ",", 
+        RowBox[{"PlotLegends", "\[Rule]", "legend"}]}], "]"}]}], ";"}]}], 
+   "]"}]}]], "Code",
  CellChangeTimes->{{3.660829435080468*^9, 3.660829553626563*^9}, {
    3.660829593625475*^9, 3.6608296210633917`*^9}, {3.660831131085106*^9, 
    3.6608311319967203`*^9}, {3.6608311719591703`*^9, 
@@ -417,7 +516,15 @@ Cell[BoxData[
    3.6611815427258177`*^9, 3.6611815466757812`*^9}, 3.661182542504429*^9, {
    3.661203297063508*^9, 3.661203298549518*^9}, {3.661277395894855*^9, 
    3.661277397238447*^9}, {3.661277939714157*^9, 3.6612779503704367`*^9}, 
-   3.661710123316128*^9}],
+   3.661710123316128*^9, {3.6622294531636667`*^9, 3.662229474145191*^9}, {
+   3.662229995615108*^9, 3.662230008535432*^9}, 3.662230736718123*^9, {
+   3.662230772288644*^9, 3.662230789510312*^9}, {3.662242770772409*^9, 
+   3.6622428196123047`*^9}, {3.6622428617886467`*^9, 3.662242928871036*^9}, {
+   3.662242966209818*^9, 3.6622430127641993`*^9}, {3.662243055459545*^9, 
+   3.6622431683532667`*^9}, {3.662243314031211*^9, 3.662243375643642*^9}, {
+   3.6622434352696123`*^9, 3.662243442596788*^9}, {3.6622434976926126`*^9, 
+   3.662243501450798*^9}, {3.662243545804783*^9, 3.662243554385635*^9}, {
+   3.6622435877942657`*^9, 3.662243786388217*^9}}],
 
 Cell[BoxData["imgGeoPlot"], "Input",
  CellChangeTimes->{{3.661710138867299*^9, 3.66171014297235*^9}}],
@@ -450,18 +557,18 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[558, 20, 2868, 71, 354, "Code"],
-Cell[3429, 93, 6177, 125, 414, "Code"],
-Cell[9609, 220, 99, 1, 28, "Input"],
-Cell[9711, 223, 99, 1, 28, "Input"],
-Cell[9813, 226, 100, 1, 28, "Input"],
-Cell[9916, 229, 1656, 41, 193, "Code"],
-Cell[11575, 272, 102, 1, 28, "Input"],
-Cell[11680, 275, 3776, 88, 321, "Code"],
-Cell[15459, 365, 1342, 27, 66, "Code"],
-Cell[16804, 394, 144, 2, 28, "Input"],
-Cell[16951, 398, 1097, 21, 66, "Code"],
-Cell[18051, 421, 101, 1, 28, "Input"],
-Cell[18155, 424, 340, 7, 66, "Code"]
+Cell[3429, 93, 8038, 170, 510, "Code"],
+Cell[11470, 265, 99, 1, 28, "Input"],
+Cell[11572, 268, 99, 1, 28, "Input"],
+Cell[11674, 271, 100, 1, 28, "Input"],
+Cell[11777, 274, 1579, 37, 193, "Code"],
+Cell[13359, 313, 102, 1, 28, "Input"],
+Cell[13464, 316, 3776, 88, 321, "Code"],
+Cell[17243, 406, 1342, 27, 66, "Code"],
+Cell[18588, 435, 144, 2, 28, "Input"],
+Cell[18735, 439, 3935, 87, 210, "Code"],
+Cell[22673, 528, 101, 1, 28, "Input"],
+Cell[22777, 531, 340, 7, 66, "Code"]
 }
 ]
 *)

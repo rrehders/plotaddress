@@ -56,7 +56,13 @@ cmdlnparser[arg_] := Module[{tmp},
 (* If $ScriptCommandLine is completely blank, the script/notebook is being debugged in Mathematica *)
 If[Length[$ScriptCommandLine]==0,
 	(* Set up a debug Command Line *)
-	args={"plotaddess", NotebookDirectory[]<>"test/address1.csv",NotebookDirectory[]<>"test/address2.csv","colour={Blue,Green}","legend={Personal,Work}"};,
+	(* args={"plotaddress", NotebookDirectory[]<>"test/address1.csv",NotebookDirectory[]<>"test/address2.csv","colour={Blue,Green}","legend={Personal,Work}"};, *)
+	(* Set up a debug Command Line *)
+	(* args={"plotaddress", NotebookDirectory[]<>"test/address1.csv","legend={Personal,Work}"};, *)
+	(* Set up a debug Command Line *)
+	(* args={"plotaddress", NotebookDirectory[]<>"test/address1.csv","colour={Blue,Green}"};, *)
+If[Length[$ScriptCommandLine]==1,
+	Print["USGE: plotaddress file1 [file2...] [colour={colour1,colour2...}] [legend={title1,title2...}"],
 	args=$ScriptCommandLine;
 ]
 
@@ -76,7 +82,7 @@ readaddr[ifile_] :=
 	]
 
 (* Read files from the command line *)
-tblInput = readaddr /@ flist[[;;-3]];
+tblInput = readaddr /@ flist;
 
 
 (* Define Function to geolocate adress list *)
@@ -104,7 +110,16 @@ geoPos = Map[GeoPosition[#[[{6,7}]]]&, tblLoc, {2}];
 
 
 (* Plot the locations *)
-imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920,PlotStyle->clist,PlotLegends->legend];
+(* Use Bit operations to build 4 cases based on presence of colour and legend parameters *)
+(* 0 no colour or legend specified *)
+(* 1 Legends specified, but not colours *)
+(* 2 Colours specified, but not Legend *)
+(* 3 Both Colours and Legend Specified *)
+Switch[If[Length[clist]>0,BitSet[0,1],0]+If[Length[legend]>0,BitSet[0,0],0],
+	0,imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920];,
+	1,imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920,PlotLegends->legend];,
+	2,imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920,PlotStyle->clist];,
+	3,imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920,PlotStyle->clist,PlotLegends->legend];]
 
 
 (* Save Graphic *)
