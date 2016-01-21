@@ -45,37 +45,73 @@ api[address_String] :=
 cmdlnparser[arg_] := Module[{tmp},
 	If[StringContainsQ[arg,"colour="],
 		clist=ToExpression[Rest[StringCases[arg, RegularExpression["\\w+"]]]];
-		Return
+		Return[];
 	];
 	If[StringContainsQ[arg,"legend="],
 		legend=Rest[StringCases[arg, RegularExpression["\\w+"]]];
-		Return;
+		Return[];
 	];
 	AppendTo[flist,arg];
 ]
-(* If ScriptCommandline is completely blank, the script is being debugged in Mathematica *)
+args = $ScriptCommandLine;
+
+
+(* If $ScriptCommandLine is completely blank, the script/notebook is being debugged in Mathematica *)
 If[Length[$ScriptCommandLine]==0,
+	args={"plotaddress"};
 	(* Set up a debug Command Line *)
-	args={NotebookDirectory[]<>"test/address1.csv",NotebookDirectory[]<>"test/address2.csv","colour={Blue,Green}","legend={Personal,Work}"};
+	(* AppendTo[args,NotebookDirectory[]<>"test/address1.csv"]; *)
+	(* AppendTo[args,NotebookDirectory[]<>"test/address2.csv"]; *)
+	(* AppendTo[args,"colour={Blue,Green}"]; *)
+	(* AppendTo[args,"legend={Personal,Work}"]; *)
+	(* AppendTo[args,NotebookDirectory[]<>"test/address.csv"]; *)
+,
+	Nothing
+]
+
+
+If[Length[args]==1,
+	Print["USAGE: plotaddress file1 [file2...] [colour={colour1,colour2...}] [legend={title1,title2...}"]
+	Exit[]
+,
+	Nothing
 ]
 
 (* Parse command line *)
 flist = {};
 clist = {};
 legend = {};
-cmdlnparser /@ args;
+cmdlnparser /@ Rest[args];
+Print["Command Line Parsed"]
+(* Change Default plot colour to Blue *)
+(* If Colour is not pecified Mathematica defaults to an orange colour *)
+If[Length[clist]==0,
+	clist={Blue}
+,
+	Nothing
+]
 
 
 (* Define function to read input addresses *)
-readaddr[ifile_] :=
-	Switch[FileExtension[ifile],
-		"csv",Import[ifile],
-		"xls",Import[ifile,{"data",1}],
-		"xlsx",Import[ifile,{"data",1}]
-	]
+readaddr[ifile_] := 
+Switch[FileExtension[ifile],
+	"csv",Import[ifile],
+	"xls",Import[ifile,{"data",1}],
+	"xlsx",Import[ifile,{"data",1}],
+	_,Nothing
+]
 
 (* Read files from the command line *)
-tblInput = readaddr /@ flist[[;;-3]];
+tblInput = readaddr /@ flist;
+
+
+If[MemberQ[tblInput,$Failed],
+	Print["One or more files specified do not exist"];
+	Exit[1]
+,
+	Print["Input files Read"]
+]
+
 
 
 (* Define Function to geolocate adress list *)
@@ -96,15 +132,29 @@ geoloc[input_] := Module[{colAddresses, colLocations, tmp},
 
 (* Geolocate Addresses from Google Maps *)
 tblLoc = geoloc /@ tblInput;
+Print["Address lookup from Google Complete"]
 
 
 (* Convert the full nested list into a list of Goegraphic Coordinates only *) 
 geoPos = Map[GeoPosition[#[[{6,7}]]]&, tblLoc, {2}];
+Print["Coordinates converted to positions"]
 
 
 (* Plot the locations *)
-imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920,PlotStyle->clist,PlotLegends->legend];
+(* Use Bit operations to build 4 cases based on presence of colour and legend parameters *)
+(* 0 no colour or legend specified *)
+(* 1 Legends specified, but not colours *)
+(* 2 Colours specified, but not Legend *)
+(* 3 Both Colours and Legend Specified *)
+Switch[If[Length[clist]>0,BitSet[0,1],0]+If[Length[legend]>0,BitSet[0,0],0],
+	0,imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920];,
+	1,imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920,PlotLegends->legend];,
+	2,imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920,PlotStyle->clist];,
+	3,imgGeoPlot = GeoListPlot[geoPos,ImageSize->1920,PlotStyle->clist,PlotLegends->legend];,
+	_,Nothing]
+Print["Locations plotted"]
 
 
 (* Save Graphic *)
 Export["addrplot.jpg",imgGeoPlot]
+Print["Output file created"]
