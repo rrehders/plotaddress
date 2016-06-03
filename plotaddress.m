@@ -130,9 +130,9 @@ geoloc[input_] := Module[{colAddresses, colLocations, tmp},
 	Select[tmp,NumberQ[#[[6]]]&]
 ]
 
-(* Geolocate Addresses from Google Maps *)
-tblLoc = geoloc /@ tblInput;
-Print["Address lookup from Google Complete"]
+(* Clean Addresses in preparation for plotting *)
+tblLoc = Select[tblInput,NumberQ[#[[6]]&];
+Print["Address clense Complete"]
 
 
 (* Convert the full nested list into a list of Goegraphic Coordinates only *) 
